@@ -21,7 +21,8 @@ class HuntForm extends Component {
 
 		try {
 			const accounts = await web3.eth.getAccounts();
-			await bountyHub.methods.createHunt(this.state.secret, this.state.reward).send({
+			const reward = web3.utils.toWei(this.state.reward, 'ether').toString();
+			await bountyHub.methods.createHunt(this.state.secret, reward).send({
 				from: accounts[0]
 			});
 
@@ -40,7 +41,7 @@ class HuntForm extends Component {
 					<label>Hunt Secret</label>
 					<Input
 						value={this.state.secret}
-						onChange={(event) => this.setState({ secret: event.target.secret })}
+						onChange={(event) => this.setState({ secret: event.target.value })}
 						label="address"
 						labelPosition="right"
 					/>
@@ -49,7 +50,7 @@ class HuntForm extends Component {
 					<label>Reward</label>
 					<Input
 						value={this.state.reward}
-						onChange={(event) => this.setState({ reward: event.target.reward })}
+						onChange={(event) => this.setState({ reward: event.target.value })}
 						label="ether"
 						labelPosition="right"
 					/>

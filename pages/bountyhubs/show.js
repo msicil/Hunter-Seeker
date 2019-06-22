@@ -6,6 +6,7 @@ import BountyHub from '../../ethereum/build/BountyHub.json';
 import web3 from '../../ethereum/web3';
 import { Link } from '../../routes';
 import HuntForm from '../../client/components/HuntForm';
+import SubmitForm from '../../client/components/SubmitForm';
 
 class BountyHubShow extends Component {
 	static async getInitialProps(props) {
@@ -21,17 +22,18 @@ class BountyHubShow extends Component {
 			balance: summary[0],
 			huntCount: summary[1],
 			accessPoint: summary[2],
-			manager: summary[3]
+			manager: summary[3],
+			status: summary[4]
 		};
 	}
 
 	renderCards() {
-		const { balance, manager, accessPoint, huntCount } = this.props;
+		const { balance, manager, accessPoint, huntCount, status } = this.props;
 
 		const items = [
 			{
-				header: manager,
-				meta: 'Address of Manager',
+				header: status,
+				meta: 'Hub Status',
 				description: '',
 				style: { overflowWrap: 'break-word' }
 			},
@@ -63,10 +65,7 @@ class BountyHubShow extends Component {
 					<Grid.Row>
 						<Grid.Column width={9}>
 							{this.renderCards()}
-							<h4 className="ui horizontal divider header">
-								<i className="paper plane icon" />
-								Submit Solution
-							</h4>
+							<SubmitForm address={this.props.address} />
 						</Grid.Column>
 
 						<Grid.Column width={6}>
@@ -81,9 +80,6 @@ class BountyHubShow extends Component {
 							</h4>
 							<HuntForm address={this.props.address} />
 						</Grid.Column>
-					</Grid.Row>
-					<Grid.Row>
-						<Grid.Column />
 					</Grid.Row>
 				</Grid>
 			</Layout>

@@ -37,7 +37,7 @@ class FundForm extends Component {
 		return (
 			<Form onSubmit={this.onSubmit} error={!!this.state.errorMessage}>
 				<Form.Field>
-					<label>Amount to Deposit</label>
+					<label>Amount</label>
 					<Input
 						value={this.state.value}
 						onChange={(event) => this.setState({ value: event.target.value })}
@@ -48,7 +48,7 @@ class FundForm extends Component {
 
 				<Message error header="Oops!" content={this.state.errorMessage} />
 				<Button primary loading={this.state.loading}>
-					Send
+					Deposit
 				</Button>
 			</Form>
 		);
