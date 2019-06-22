@@ -17,21 +17,10 @@
 		"start": "node server",
 		"dev": "next dev"
 	},
-	"husky": {
-		"hooks": {
-			"pre-commit": "lint-staged"
-		}
-	},
+	"husky": {},
 	"lint-staged": {
-		"*.{js,jsx}": [
-			"prettier --write",
-			"npm run lint-fix",
-			"git add"
-		],
-		"*.{css,scss,json,md}": [
-			"prettier --write",
-			"git add"
-		]
+		"*.{js,jsx}": [ "prettier --write", "npm run lint-fix", "git add" ],
+		"*.{css,scss,json,md}": [ "prettier --write", "git add" ]
 	},
 	"author": "Michael Siciliano",
 	"license": "MIT",
@@ -69,7 +58,7 @@
 		"solc": "^0.4.25",
 		"truffle-hdwallet-provider": "0.0.3",
 		"url-loader": "^1.1.2",
-		"web3": "^1.0.0-beta.35",
+		"web3": "^1.0.0-beta.37",
 		"webpack": "^4.35.0",
 		"webpack-cli": "^3.3.4"
 	},

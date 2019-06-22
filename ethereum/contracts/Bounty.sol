@@ -65,7 +65,7 @@ contract BountyHub {
         }
     }
 
-    function getSummary() public restricted view returns (
+    function getSummary() public view returns (
       uint, uint, string, address
       ) {
         return (

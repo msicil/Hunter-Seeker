@@ -1,48 +1,54 @@
-import React, { Component } from 'react';
-import { Card, Button } from 'semantic-ui-react';
-import factory from '../ethereum/factory';
-import Layout from '../client/components/Layout';
-import { Link } from '../routes';
+import React, {Component} from 'react'
+import {Card, Button} from 'semantic-ui-react'
+import factory from '../ethereum/factory'
+import Layout from '../client/components/Layout'
+import {Link} from '../routes'
 
 class BountyIndex extends Component {
-	static async getInitialProps() {
-		const bountyHubs = await factory.methods.getDeployedHubs().call();
+  static async getInitialProps() {
+    const bountyHubs = await factory.methods.getDeployedHubs().call()
 
-		return { bountyHubs };
-	}
+    return {bountyHubs}
+  }
 
-	renderBountyHubs() {
-		const items = this.props.bountyHubs.map((address) => {
-			return {
-				header: address,
-				// <Link route={`/campaigns/${address}`}>
-				//   <a>View Campaign</a>
-				// </Link>
-				description: <a>View Bounty Hub</a>,
-				fluid: true
-			};
-		});
+  renderBountyHubs() {
+    const items = this.props.bountyHubs.map(address => {
+      return {
+        header: address,
+        description: (
+          <Link route={`/bountyhubs/${address}`}>
+            <a>View Bounty Hub</a>
+          </Link>
+        ),
+        fluid: true
+      }
+    })
 
-		return <Card.Group items={items} />;
-	}
+    return <Card.Group items={items} />
+  }
 
-	render() {
-		return (
-			<Layout>
-				<div>
-					<h3>Active Bounty Hubs</h3>
+  render() {
+    return (
+      <Layout>
+        <div>
+          <h3>Active Bounty Hubs</h3>
 
-					<Link route="/bountyhubs/new">
-						<a>
-							<Button floated="right" content="Create Bounty Hub" icon="add circle" primary />
-						</a>
-					</Link>
+          <Link route="/bountyhubs/new">
+            <a>
+              <Button
+                floated="right"
+                content="Create Bounty Hub"
+                icon="add circle"
+                primary
+              />
+            </a>
+          </Link>
 
-					{this.renderBountyHubs()}
-				</div>
-			</Layout>
-		);
-	}
+          {this.renderBountyHubs()}
+        </div>
+      </Layout>
+    )
+  }
 }
 
-export default BountyIndex;
+export default BountyIndex

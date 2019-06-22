@@ -1,9 +1,9 @@
-import web3 from './web3';
-import BountyHubFactory from './build/BountyHubFactory.json';
+import web3 from './web3'
+import BountyHubFactory from './build/BountyHubFactory.json'
 
 const instance = new web3.eth.Contract(
-	JSON.parse(BountyHubFactory.interface),
-	'0xCa459EDF5ab10d00042b67067af0720cB1CDB5b0'
-);
+  JSON.parse(BountyHubFactory.interface),
+  '0xDD07b36D8a416013582Ef3a1276AB3f999Aec195'
+)
 
-export default instance;
+export default instance
