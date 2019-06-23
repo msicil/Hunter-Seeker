@@ -33,6 +33,7 @@ contract BountyHub {
     BugHunt[] public hunts;
     address public manager;
     string public accessPoint;
+    string public status = "Idle";
 
     modifier restricted() {
         require(msg.sender == manager);
@@ -56,6 +57,7 @@ contract BountyHub {
         });
 
         hunts.push(newHunt);
+        status = "Hunt Created!";
     }
 
     function submitSolution(uint index, address secret, string solution) public returns(string) {
@@ -63,25 +65,26 @@ contract BountyHub {
 
         if(hunt.complete == true)
         {
-            return "Hunt already solved";
+            status = "Hunt already solved!";
         } else if(secret != hunt.secret){
-            return 'Invalid secret';
+            status = 'Invalid secret';
         } else {
-        hunt.solution = solution;
-        hunt.complete = true;
-        msg.sender.transfer(hunt.reward);
-        return "Reward Sent!";
+            hunt.solution = solution;
+            hunt.complete = true;
+            msg.sender.transfer(hunt.reward);
+            status = "Reward Sent!";
         }
     }
 
     function getSummary() public view returns (
-      uint, uint, string, address
+      uint, uint, string, address, string
       ) {
         return (
           address(this).balance,
           hunts.length,
           accessPoint,
-          manager
+          manager,
+          status
         );
     }
 
