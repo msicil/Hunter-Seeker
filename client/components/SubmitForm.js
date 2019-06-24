@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Form, Input, Message, Button } from 'semantic-ui-react';
+import { Form, Input, Message, Button, Select } from 'semantic-ui-react';
 import BountyHub from '../../ethereum/bountyhub';
 import web3 from '../../ethereum/web3';
 import { Router } from '../../routes';
@@ -22,13 +22,9 @@ class SubmitForm extends Component {
 
 		try {
 			const accounts = await web3.eth.getAccounts();
-			const returnString = await bountyHub.methods
-				.submitSolution(this.state.index, this.state.secret, this.state.solution)
-				.send({
-					from: accounts[0]
-				});
-
-			console.log(returnString);
+			await bountyHub.methods.submitSolution(this.state.index, this.state.secret, this.state.solution).send({
+				from: accounts[0]
+			});
 
 			Router.replaceRoute(`/bountyhubs/${this.props.address}`);
 		} catch (err) {
@@ -39,46 +35,51 @@ class SubmitForm extends Component {
 	};
 
 	render() {
-		return (
-			<div style={{ marginRight: '20px', marginTop: '25px' }}>
-				<h4 className="ui horizontal divider header">
-					<i className="paper plane icon" />
-					Submit Solution
-				</h4>
-				<Form onSubmit={this.onSubmit} error={!!this.state.errorMessage}>
-					<Form.Group widths="equal">
+		if (this.props.huntOptions[0]) {
+			return (
+				<div style={{ marginTop: '30px' }}>
+					<h4 className="ui horizontal divider header">
+						<i className="paper plane icon" />
+						Submit Solution
+					</h4>
+					<Form onSubmit={this.onSubmit} error={!!this.state.errorMessage}>
+						<Form.Group>
+							<Form.Field width="5">
+								<label>Index</label>
+								<Select
+									placeholder="Select hunt index"
+									options={this.props.huntOptions}
+									onChange={(event, target) => {
+										this.setState({ index: target.value });
+									}}
+								/>
+							</Form.Field>
+							<Form.Field width="11">
+								<label>Discovered Secret</label>
+								<Input
+									value={this.state.secret}
+									onChange={(event) => this.setState({ secret: event.target.value })}
+									label="address"
+									labelPosition="right"
+								/>
+							</Form.Field>
+						</Form.Group>
 						<Form.Field>
-							<label>Index</label>
-							<Input
-								value={this.state.index}
-								onChange={(event) => this.setState({ index: event.target.value })}
+							<label>Solution</label>
+							<Form.TextArea
+								value={this.state.solution}
+								onChange={(event) => this.setState({ solution: event.target.value })}
 							/>
 						</Form.Field>
-						<Form.Field>
-							<label>Discovered Secret</label>
-							<Input
-								value={this.state.secret}
-								onChange={(event) => this.setState({ secret: event.target.value })}
-								label="address"
-								labelPosition="right"
-							/>
-						</Form.Field>
-					</Form.Group>
-					<Form.Field>
-						<label>Solution</label>
-						<Form.TextArea
-							value={this.state.solution}
-							onChange={(event) => this.setState({ solution: event.target.value })}
-						/>
-					</Form.Field>
 
-					<Message error header="Oops!" content={this.state.errorMessage} />
-					<Button primary loading={this.state.loading}>
-						Submit
-					</Button>
-				</Form>
-			</div>
-		);
+						<Message error header="Oops!" content={this.state.errorMessage} />
+						<Button primary loading={this.state.loading}>
+							Submit
+						</Button>
+					</Form>
+				</div>
+			);
+		} else return <div />;
 	}
 }
 

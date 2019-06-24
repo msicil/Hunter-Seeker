@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
-import { Card, Grid, Button, GridColumn } from 'semantic-ui-react';
+import { Card, Grid, Table, Segment } from 'semantic-ui-react';
 import Layout from '../../client/components/Layout';
 import FundForm from '../../client/components/FundForm';
 import BountyHub from '../../ethereum/build/BountyHub.json';
 import web3 from '../../ethereum/web3';
-import { Link } from '../../routes';
 import HuntForm from '../../client/components/HuntForm';
 import SubmitForm from '../../client/components/SubmitForm';
 
@@ -17,35 +16,38 @@ class BountyHubShow extends Component {
 			from: accounts[0]
 		});
 
+		const hunts = await bountyHub.methods.getHunts().call({
+			from: accounts[0]
+		});
+
+		const huntOptions = hunts.map((hunt, index) => {
+			return {
+				key: index.toString(),
+				value: index.toString(),
+				text: index.toString()
+			};
+		});
+
 		return {
 			address: props.query.address,
 			balance: summary[0],
 			huntCount: summary[1],
 			accessPoint: summary[2],
 			manager: summary[3],
-			status: summary[4]
+			status: summary[4],
+			hunts,
+			huntOptions
 		};
 	}
 
 	renderCards() {
-		const { balance, manager, accessPoint, huntCount, status } = this.props;
+		const { balance, accessPoint } = this.props;
 
 		const items = [
-			{
-				header: status,
-				meta: 'Hub Status',
-				description: '',
-				style: { overflowWrap: 'break-word' }
-			},
 			{
 				header: accessPoint,
 				meta: 'Access Point (URL)',
 				description: 'Target URL the hunter should try and infiltrate'
-			},
-			{
-				header: huntCount,
-				meta: 'Number of Active Hunts',
-				description: 'Number of hidden keys within the Access Point'
 			},
 			{
 				header: web3.utils.fromWei(balance, 'ether'),
@@ -60,15 +62,43 @@ class BountyHubShow extends Component {
 	render() {
 		return (
 			<Layout>
-				<h3>Bounty Hub</h3>
-				<Grid>
+				<h3>
+					Bounty Hub
+					<h4>Status: {this.props.status}</h4>
+				</h3>
+
+				<Grid celled>
 					<Grid.Row>
-						<Grid.Column width={9}>
+						<Grid.Column width={11}>
 							{this.renderCards()}
-							<SubmitForm address={this.props.address} />
+							<Table celled>
+								<Table.Header>
+									<Table.Row>
+										<Table.HeaderCell>Index</Table.HeaderCell>
+										<Table.HeaderCell>Reward (ether)</Table.HeaderCell>
+										<Table.HeaderCell>Complete</Table.HeaderCell>
+										<Table.HeaderCell>Solution</Table.HeaderCell>
+									</Table.Row>
+								</Table.Header>
+								<Table.Body>
+									{this.props.hunts.map((hunt, index) => {
+										return (
+											<Table.Row key={index + '-hunt'}>
+												<Table.Cell>{index}</Table.Cell>
+												<Table.Cell>
+													{hunt.reward ? web3.utils.fromWei(hunt.reward, 'ether') : ''}
+												</Table.Cell>
+												<Table.Cell>{hunt.complete ? hunt.complete.toString() : ''}</Table.Cell>
+												<Table.Cell>{hunt.solution}</Table.Cell>
+											</Table.Row>
+										);
+									})}
+								</Table.Body>
+							</Table>
+							<SubmitForm address={this.props.address} huntOptions={this.props.huntOptions} />
 						</Grid.Column>
 
-						<Grid.Column width={6}>
+						<Grid.Column width={5} style={{ paddingTop: '30px' }}>
 							<h4 className="ui horizontal divider header">
 								<i className="ethereum icon" />
 								Fund Bounty Hub

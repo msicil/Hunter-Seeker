@@ -13,9 +13,7 @@
 		"lint-fix": "npm run lint -- --fix",
 		"prettify": "prettier --write \"**/*.{js,jsx,json,css,scss,md}\"",
 		"postinstall": "touch secrets.js",
-		"seed": "node script/seed.js",
-		"start": "node server",
-		"dev": "next dev"
+		"start": "node server.js"
 	},
 	"husky": {},
 	"lint-staged": {
