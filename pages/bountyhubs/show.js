@@ -50,7 +50,7 @@ class BountyHubShow extends Component {
 				description: 'Target URL the hunter should try and infiltrate'
 			},
 			{
-				header: web3.utils.fromWei(balance, 'ether'),
+				header: web3.utils.fromWei(balance.toString(), 'ether'),
 				meta: 'Hub Balance (ether)',
 				description: 'Available funds left to award'
 			}
@@ -82,11 +82,16 @@ class BountyHubShow extends Component {
 								</Table.Header>
 								<Table.Body>
 									{this.props.hunts.map((hunt, index) => {
+										console.log(hunt);
 										return (
 											<Table.Row key={index + '-hunt'}>
 												<Table.Cell>{index}</Table.Cell>
 												<Table.Cell>
-													{hunt.reward ? web3.utils.fromWei(hunt.reward, 'ether') : ''}
+													{hunt.reward ? (
+														web3.utils.fromWei(hunt.reward.toString(), 'ether')
+													) : (
+														''
+													)}
 												</Table.Cell>
 												<Table.Cell>{hunt.complete ? hunt.complete.toString() : ''}</Table.Cell>
 												<Table.Cell>{hunt.solution}</Table.Cell>
